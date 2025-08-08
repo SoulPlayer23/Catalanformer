@@ -11,9 +11,20 @@ class MultiHeadedAttention(nn.Module):
                 self.compute = nn.Linear(model_dim, model_dim)
                 self.dropout = nn.Dropout(0.2)
 
-    def forward(self, embedded):
+    def forward(self, query, key=None, value=None):
+        """
+        query: Tensor of shape (B, T_q, D)
+        key:   Tensor of shape (B, T_k, D) or None (defaults to query)
+        value: Tensor of shape (B, T_v, D) or None (defaults to key)
+        """
+        if key is None:
+            key = query
+        if value is None:
+            value = key
+
         head_outputs = []
         for head in self.attention_heads:
-            head_outputs.append(head(embedded))
-        concatenated = torch.cat(head_outputs, dim = 2)
+            head_outputs.append(head(query, key, value))
+
+        concatenated = torch.cat(head_outputs, dim = -1)
         return self.dropout(self.compute(concatenated))

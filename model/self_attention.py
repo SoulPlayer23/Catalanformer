@@ -11,10 +11,20 @@ class SingleHeadAttention(nn.Module):
         self.value_layer = nn.Linear(model_dim, head_size, bias=False)
         self.mask = mask
 
-    def forward(self, embedded):
-        k = self.key_layer(embedded)
-        q = self.query_layer(embedded)
-        v = self.value_layer(embedded)
+    def forward(self, query, key=None, value=None):
+        """
+        query: (B, T_q, D)
+        key:   (B, T_k, D) or None (defaults to query)
+        value: (B, T_v, D) or None (defaults to key)
+        """
+        if key is None:
+            key = query
+        if value is None:
+            value = key
+        
+        k = self.key_layer(key)
+        q = self.query_layer(query)
+        v = self.value_layer(value)
 
         scores = q @ torch.transpose(k, 1, 2)
         context_length, attention_dim = k.shape[1], k.shape[2]
@@ -25,6 +35,6 @@ class SingleHeadAttention(nn.Module):
             mask = (lower_triangular == 0).to(device)
             scores = scores.masked_fill(mask, float('-inf'))
 
-        scores = nn.functional.softmax(scores, dim = 2)
+        scores = nn.functional.softmax(scores, dim = -1)
 
         return scores @ v
