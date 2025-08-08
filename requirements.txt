@@ -1,0 +1,8 @@
+numpy
+pandas
+scikit-learn
+matplotlib
+tqdm
+pyyaml
+torch --index-url https://download.pytorch.org/whl/cu128
+torchvision --index-url https://download.pytorch.org/whl/cu128
