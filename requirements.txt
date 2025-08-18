@@ -4,5 +4,9 @@ scikit-learn
 matplotlib
 tqdm
 pyyaml
+datasets
+requests
+dill
+transformers
 torch --index-url https://download.pytorch.org/whl/cu128
 torchvision --index-url https://download.pytorch.org/whl/cu128

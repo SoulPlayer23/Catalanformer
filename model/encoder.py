@@ -21,7 +21,7 @@ class Encoder(nn.Module):
         embedded = embedded + self.pos_embedding(positions)
 
         hidden_states = self.layer_norm_three(self.transformer_blocks(embedded))  # (B, T, model_dim)
-        logits = self.vocab_projection(hidden_states)  # (B, T, vocab_size)
+        # logits = self.vocab_projection(hidden_states)  # (B, T, vocab_size)
         # logits is BxTxV, where V is the vocabulary size
 
-        return hidden_states, logits
+        return hidden_states
