@@ -8,5 +8,6 @@ datasets
 requests
 dill
 transformers
+mlflow
 torch --index-url https://download.pytorch.org/whl/cu128
 torchvision --index-url https://download.pytorch.org/whl/cu128
