@@ -9,5 +9,6 @@ requests
 dill
 transformers
 mlflow
+spacy
 torch --index-url https://download.pytorch.org/whl/cu128
 torchvision --index-url https://download.pytorch.org/whl/cu128

@@ -10,18 +10,21 @@ class Encoder(nn.Module):
         self.token_embedding = nn.Embedding(vocab_size, model_dim)
         self.pos_embedding = nn.Embedding(context_length, model_dim)
         self.transformer_blocks = nn.Sequential()
-        for _ in range(num_blocks):
-            self.transformer_blocks.append(Encoder_Block(model_dim, num_heads))
+        self.transformer_blocks = nn.ModuleList(
+            [Encoder_Block(model_dim, num_heads) for _ in range(num_blocks)]
+        )
         self.layer_norm_three = nn.LayerNorm(model_dim)
-        self.vocab_projection = nn.Linear(model_dim, vocab_size)
     
-    def forward(self, context):
+    def forward(self, context, src_mask):
         embedded = self.token_embedding(context)
-        positions = torch.arange(context.shape[1], device=embedded.device)
-        embedded = embedded + self.pos_embedding(positions)
+        context_length = context.shape[1]
+        positions = torch.arange(context_length, device=context.device)
+        pos_embedding = self.pos_embedding(positions).unsqueeze(0)
+        embedded = embedded + pos_embedding
 
-        hidden_states = self.layer_norm_three(self.transformer_blocks(embedded))  # (B, T, model_dim)
-        # logits = self.vocab_projection(hidden_states)  # (B, T, vocab_size)
-        # logits is BxTxV, where V is the vocabulary size
+        for block in self.transformer_blocks:
+            embedded = block(embedded, src_mask)
+
+        hidden_states = self.layer_norm_three(embedded)  # (B, T, model_dim)
 
         return hidden_states
