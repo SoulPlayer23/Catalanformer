@@ -86,12 +86,12 @@ While not state-of-the-art, this project successfully demonstrates a deep, from-
 ## 🖼️ Visual Overview
 
 ### Model Metrics and Parameters
-![Model Architecture](images\metrics_parameters.png)
+![Model Architecture](images/metrics_parameters.png)
 
 ### Training Metrics
-![Metrics & Parameters](images\model_metrics.png)
+![Metrics & Parameters](images/model_metrics.png)
 
 ### Translation Example
-![Translation Example](images\translation_example.png)
+![Translation Example](images/translation_example.png)
 
 ---
